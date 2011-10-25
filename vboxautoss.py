@@ -108,36 +108,39 @@ def parse_options():
     parser = optparse.OptionParser()
     parser.add_option("--vboxmanage_path",
                       type = "string", 
-                      default="vboxmanage",
-                      help="Full path to VBoxManage utility")
+                      default ="vboxmanage",
+                      help = "Full path to VBoxManage utility")
     parser.add_option("--snapshot_vms", 
                       action = "store_true",
                       default = False,
-                      help="Take a snapshot of each machine in VirtualBox")
+                      help = "Take a snapshot of each machine in VirtualBox")
     parser.add_option("--prune_snapshots", 
                       type = "int",
                       default = 0,
-                      help="Prune oldest snapshots until n are left")
+                      help = "Prune oldest snapshots until n are left")
     parser.add_option("--smtp_server", 
                       type = "string",
-                      help="SMTP to send logs via email")
+                      help = "SMTP to send logs via email")
     parser.add_option("--smtp_server_port", 
                       type = "int",
                       default = "465",
-                      help="SMTP server port")
+                      help = "SMTP server port")
     parser.add_option("--smtp_user", 
                       type = "string",
-                      help="User on SMTP server")
+                      help = "User on SMTP server")
     parser.add_option("--smtp_passwd", 
                       type = "string",
-                      help="Password for user on SMTP server")
+                      help = "Password for user on SMTP server")
     parser.add_option("--email", 
                       type = "string",
-                      help="User to email log to")
+                      help = "User to email log to")
     parser.add_option("--smtp_secure", 
                       action = "store_true",
                       default = False,
-                      help="Use secure SSL/TLS login on SMTP server")
+                      help = "Use secure SSL/TLS login on SMTP server")
+    parser.add_option("--tag", 
+                      type = "string",
+                      help = "Append this tag as a suffix to snapshot names")
     return parser.parse_args()
     
 if __name__ == "__main__":
@@ -151,9 +154,12 @@ if __name__ == "__main__":
         # go through lists of vms
         for (vmname, vmuuid) in get_vm_list():
             ssname = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            if options.tag:
+                 ssname += " " + options.tag
+                 
             custlogger.info("Taking snapshot for vm [%s] with name [%s]" % (vmname, ssname))
             
-            subprocess.check_output('"%s" snapshot "%s" take "%s"' % 
+            subprocess.check_output('"%s" snapshot "%s" take "%s" --pause' % 
                                     (options.vboxmanage_path, vmname, ssname))
         
     if options.prune_snapshots > 0:
