@@ -1,0 +1,7 @@
+VirtualBox script to take snapshots of all guests on a given system and/or prune snapshots on given system
+
+* Works by calling vboxmanage script and parsing output
+* Snapshots are taken of all guests on the system
+* Pruning is specified by --prune_snapshots option which takes the number of snapshots to keep
+  (ie: --prune_snapshots 10 means keep only 10 snapshots per guest, deleting any older ones)
+* Status is logged to stdout and can optionally be logged to an email address via BufferedSMTPHandler
