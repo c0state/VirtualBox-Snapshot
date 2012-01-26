@@ -155,7 +155,7 @@ if __name__ == "__main__":
         for (vmname, vmuuid) in get_vm_list():
             ssname = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
             if options.tag:
-                 ssname += " " + options.tag
+                ssname += " " + options.tag
                  
             custlogger.info("Taking snapshot for vm [%s] with name [%s]" % (vmname, ssname))
             
